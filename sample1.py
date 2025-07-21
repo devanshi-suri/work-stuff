@@ -22,3 +22,4 @@ agent = CodeAgent(
 # Now the agent can search the web!
 result = agent.run("What is the current weather in Paris?")
 print(result)
+print("thanks")
