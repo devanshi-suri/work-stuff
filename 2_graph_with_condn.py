@@ -1,24 +1,32 @@
 from typing import TypedDict, Literal
+from langgraph.graph import StateGraph, START, END
+
 class PortfolioState(TypedDict):
     amount_usd: float
     total_usd: float
     target_curr: Literal['INR','EUR']
     total: float
+
+
 def calc_total(state: PortfolioState) -> PortfolioState:
     state['total_usd'] = state['amount_usd'] * 1.08
     return state
 
+
 def convert_to_inr(state: PortfolioState) -> PortfolioState:
     state['total'] = state['total_usd'] * 85.0
     return state
+
+
 def convert_to_eur(state: PortfolioState) -> PortfolioState:
     state['total'] = state['total_usd'] * 0.9
     return state
 
+
 def choose_conversion(state: PortfolioState) -> str:
     return state['target_curr']
 
-from langgraph.graph import StateGraph, START, END
+
 builder = StateGraph(PortfolioState)
 
 builder.add_node('calc_total_node',calc_total)
