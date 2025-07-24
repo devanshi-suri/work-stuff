@@ -4,6 +4,7 @@ from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.base import TaskResult
+from autogen_agentchat.conditions import TextMentionTermination
 
 
 model = OllamaChatCompletionClient(model="llama3.2")
@@ -28,7 +29,9 @@ async def main():
          system_message = f"You are Suguru, a critic agent in a debate. You will be debating on the topic {topic} against Satoru. Keep your respinses limited to 50 words.",
          model_client=model,
     )
-    team = RoundRobinGroupChat(participants=[host, suppoter, critic], max_turns=5)
+
+    text_termination_condition = TextMentionTermination("TERMINATE","terminate")
+    team = RoundRobinGroupChat(participants=[host, suppoter, critic], max_turns=14, termination_condition=text_termination_condition)
 
     #  run the team and print after completion
 
